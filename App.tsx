@@ -15,6 +15,7 @@ const Cat = () => {
           borderWidth: 1,
         }}
         defaultValue="Name me!"
+        maxLength={40}
         onChangeText={newText => setText(newText)}
       />
     </View>
