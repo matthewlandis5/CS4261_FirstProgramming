@@ -5,18 +5,48 @@ import { initializeApp } from "firebase/app";
 import {getDatabase, ref, get, child, set, update, remove} from "firebase/database";
 import morseConversion from './letter-morse-conversion.json';
 import firebaseConfig from './config/firebase-config.json';
+import {Vibration} from 'react-native';
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+const ONE_SECOND_IN_MS = 1000;
+
 const convertTextToMorse = (text: String) => {
-  //TODO: Convert text to morse
-  //TODO: Vibrate phone with morse
+
+  let vibPattern = [.05 * ONE_SECOND_IN_MS]; // .05 second pause at beginning
+
+  for (let i = 0; i < text.length; i++) {
+
+    const letter: string = text.charAt(i).toLowerCase();
+    const morsePattern: string = morseConversion[letter] || "";
+    console.log("Converted " + letter + " to " + morsePattern);
+
+    for (let j = 0; j < morsePattern.length; j++) {
+      const morseChar: string = morsePattern.charAt(j);
+      if (morseChar === ".") {
+        vibPattern.push(0.2 * ONE_SECOND_IN_MS);
+      } else if (morseChar === "-") {
+        vibPattern.push(.95 * ONE_SECOND_IN_MS);
+      }
+      if (j < morsePattern.length - 1) {
+        vibPattern.push(0.05 * ONE_SECOND_IN_MS); // .05 second between dots and dashes
+      }
+    }
+    if (letter === " ") {
+      vibPattern.push(.01 * ONE_SECOND_IN_MS);
+      vibPattern.push(1 * ONE_SECOND_IN_MS); // 1 second between words
+    } else {
+      vibPattern.push(0.5 * ONE_SECOND_IN_MS); // .2 second between letters
+    }
+  }
+
+  //console.log("Vibrating for " + vibPattern);
+  Vibration.vibrate(vibPattern);
 };
 
-
 const Elements = () => {
-  const [text, setText] = useState<String>('...');
+  const [text, setText] = useState<string>('Hello');
   const [morse, setMorse] = useState<JSON | null>();
 
   if (morse == null) {
@@ -41,7 +71,7 @@ const Elements = () => {
           borderColor: 'gray',
           borderWidth: 1,
         }}
-        defaultValue="Hello"
+        defaultValue={text}
         maxLength={40}
         onChangeText={newText => setText(newText)}
       />
