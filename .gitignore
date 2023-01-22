@@ -9,6 +9,8 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+/config/firebase-config.json
+letter-morse-conversion.json
 
 # macOS
 .DS_Store
