@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
 import { initializeApp } from "firebase/app";
 import {getDatabase, ref, get, child, set, update, remove} from "firebase/database";
-import morseConversion from './letter-morse-conversion.json';
+//import morseConversion from './letter-morse-conversion.json';
 import firebaseConfig from './config/firebase-config.json';
 import {Vibration} from 'react-native';
 
@@ -12,14 +12,14 @@ const db = getDatabase(app);
 
 const ONE_SECOND_IN_MS = 1000;
 
-const convertTextToMorse = (text: String) => {
+const convertTextToMorse = (text: String, morse: JSON) => {
 
   let vibPattern = [.05 * ONE_SECOND_IN_MS]; // .05 second pause at beginning
 
   for (let i = 0; i < text.length; i++) {
 
     const letter: string = text.charAt(i).toLowerCase();
-    const morsePattern: string = morseConversion[letter] || "";
+    const morsePattern: string = morse[letter] || "";
     console.log("Converted " + letter + " to " + morsePattern);
 
     for (let j = 0; j < morsePattern.length; j++) {
@@ -77,7 +77,7 @@ const Elements = () => {
       />
       <Button
         onPress={() => {
-          convertTextToMorse(text);
+          convertTextToMorse(text, morse);
         }}
         title="Convert"
       />
