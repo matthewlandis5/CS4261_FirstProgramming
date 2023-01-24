@@ -41,7 +41,6 @@ const convertTextToMorse = (text: String, morse: JSON) => {
     }
   }
 
-  //console.log("Vibrating for " + vibPattern);
   Vibration.vibrate(vibPattern);
 };
 
@@ -70,6 +69,7 @@ const Elements = () => {
           height: 40,
           borderColor: 'gray',
           borderWidth: 1,
+          color: 'hotpink',
         }}
         defaultValue={text}
         maxLength={40}
@@ -81,34 +81,6 @@ const Elements = () => {
         }}
         title="Convert"
       />
-
-      {/* UPLOAD
-      <Button
-        onPress={() => {
-          set(ref(db, 'morse'), morseConversion).catch((error) => {
-            alert('Error Uploading! ' + error);
-          }).then(() => {
-            alert('Successful Uploading!');
-          });
-        }}
-        title="Upload"
-      />*/}
-      {/* DOWNLOAD
-      <Button
-        onPress={() => {
-          get(child(ref(db), 'morse')).then((snapshot) => {
-            if (snapshot.exists()) {
-              alert(JSON.stringify(snapshot.val()));
-            } else {
-              alert('No data available');
-            }
-          }).catch((error) => {
-            alert('Error getting data: ' + error);
-          });
-        }
-        }
-        title="Download"
-      />*/}
     </View>
   );
 };
